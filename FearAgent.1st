@@ -1,0 +1,17 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- This file contains all specifications pertaining to the operational control of
+      the data files. This includes usage pools, sources, sortsets, and other related
+      mechanisms.
+-->
+
+<document signature="Hero Lab Structure">
+  <!-- RDS Fear Agent This source enables the selection of the Fear Agent. -->
+  <source
+    id="FearAgent"
+    name="Fear Agent"
+    parent="UserParent"
+    reportable="yes"
+    description="Each character utilizes all of the Savage Worlds Fear Agent material.">
+    </source>
+</document>

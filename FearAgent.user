@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <fileinfo>
+    <info_author>Randy</info_author>
+    </fileinfo>
+  <thing id="setFAFear" name="Fear Agent" compset="SetAdjust" summary="Fear Agent Setting">
+    <fieldval field="setCastDiv" value="2"/>
+    <fieldval field="setFctTerm" value="Culture"/>
+    <fieldval field="setGrpTerm" value="Careers"/>
+    <usesource source="FearAgent" parent="UserParent" name="Fear Agent"/>
+    <tag group="Hero" tag="SetRules" name="SetRules" abbrev="SetRules"/>
+    <tag group="Hero" tag="NoStdPower"/>
+    <tag group="Hero" tag="NoPowerPts" name="NoPowerPts" abbrev="NoPowerPts"/>
+    <tag group="Hero" tag="ShowRobot"/>
+    <tag group="Settings" tag="NoHumans"/>
+    </thing>
+  <thing id="racFAHuman" name="Human" description="Humans are the standard by which all others are measured. Not because they are the oldest, wisest, or strongest of the races, but because they are the most widespread and varied.{br}{br}Humans come in all varieties, from savage warriors of distant jungles to wise priests and holy crusaders.{br}{br}Humans live a little over half a century in low-tech worlds, and nearly twice that in the modern age. Their skin color ranges from dark brown to the color of snow, and their eyes are blue, green, brown, or some mix of the three." compset="Race" replaces="racHuman" uniqueness="unique">
+    <usesource source="FearAgent"/>
+    <bootstrap thing="rpFAKCommo"></bootstrap>
+    <bootstrap thing="abFreeEdge"></bootstrap>
+    <containerreq phase="Initialize" priority="2100"><![CDATA[!Settings.NoHumans & !hero#Hero.Creature]]></containerreq>
+    </thing>
+  <thing id="rpFAKCommo" name="Knowledge(Common) at Smarts" description="Humans start with Knowledge(Common) at their Smarts die" compset="RacialProp" summary="Knowledge(Common) at Smarts" uniqueness="unique">
+    <fieldval field="raceCstVal" value="1"/>
+    <fieldval field="raceDomain" value="Common"/>
+    <usesource source="FearAgent"/>
+    <bootstrap thing="skKnow">
+      <assignval field="domDomain" value="Common"/>
+      </bootstrap>
+    <eval phase="Traits" priority="8000"><![CDATA[     var level as number 
+     level= #trait[attrSma]
+
+      ~This will increase the Skill
+      foreach pick in hero where "thingid.skKnow"
+        if (compare(lowercase(eachpick.field[domDomain].text), "common") = 0) then
+          eachpick.field[trtFinal].value = level
+          endif
+        nexteach
+
+~      perform #traitadjust[skSwimming,+,1,"Aquatic"]
+~      perform #resspent[resSkill,-,1,field[name].text]]]></eval>
+    <eval phase="PreTraits" priority="5000" index="2"><![CDATA[      ~This will offset the cost:
+     var level as number 
+     level= #trait[attrSma] + 1
+      perform #resspent[resSkill,-,level,"Common Language"]]]></eval>
+    </thing>
+  <thing id="hinFAAmor" name="Amorous" description="Your rocket jock has a weakness for others he finds attractive, at least in “that way.” He can’t seem to turn down requests from alluring characters, and he pays an uncomfortable amount of attention to them in social situations. This weakness isn’t necessarily limited to his own species, as there are plenty of races out in the stars that are close enough—or at least have most of the right parts in some of the right places.\n\nAmorous characters suffer a −2 penalty to resist Tricks and Tests of Wills by any character with the Attractive Edge (or −4 if Very Attractive) by the gender determined by the player—male, female, or both." compset="Hindrance" summary="Amourous" uniqueness="unique">
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="hinFADarkS" name="Dark Secret" description="Many folks had to cross some ethical boundaries to survive during the Annubius Conﬂict, but your spacer drove through at least one or two of them with a bulldozer. Maybe he sold out his fellow humans to Zerin raiders or committed war crimes so heinous even the conditions at the time couldn’t justify them. Usually the secret involves some sort of terrible crime, but sometimes it can be something not exactly against the law but just as awful in most people’s eyes.\n\nWhatever is in your character’s past, you need to keep it hidden. Your Charisma takes a −4 penalty to anyone who learns your secret. If it ever becomes public knowledge, you lose the Hindrance and replace it with either\nWanted (Major) or Enemy (Major) depending on the nature of the crime, as well as keeping the −4 Charisma modifier." compset="Hindrance" summary="Hidden Secret">
+    <usesource source="FearAgent"/>
+    <tag group="User" tag="HindMajor"/>
+    </thing>
+  <thing id="hinFAImp" name="Impulsive" description="Your adventurer has always put more credence in “He who hesitates is lost,” than in “Look before you leap.” She has a tendency to act before thoroughly thinking things through. She’s not overconfdent or foolhardy; she’s just\nprone to running with the frst option that comes to her mind" compset="Hindrance" summary="Act before thinking">
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="hinFARebel" name="Rebellious" description="Your spacer doesn’t handle authority fgures well. Maybe he learned to fend for himself during the war or maybe he just never got along with bossy types. Regardless, he runs his mouth, disobeys direct orders, or just sits and\nstews, but however his disrespect manifests itself, it’s very evident to any observer. Not surprisingly, this makes your character very unpopular with the folks in charge, whether they’re United System representatives, loudmouthed clients, or even just a local town sheriﬀ\n\nOn top of the obvious drawbacks, your hero gets a −2 penalty to Charisma with any person in a position of authority" compset="Hindrance" summary="Can&apos;t handle authority figures">
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="hinFATempe" name="Short Temper" description="Tis anger management candidate has a short fuse. She might not be one for holding a grudge, but she’s definitely  not one for holding her temper. How she responds is up to you, but she’s not likely to let any slight—real or otherwise—pass without some reaction.\n\nThis also makes her an easy target for provocation and gives her a -2 penalty to resist Taunt Attempts." compset="Hindrance" summary="Short Temper">
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="hinFATrMm" name="Trouble Magnet" description="Trouble always fnds this hero. Tings never go as planned and the center never holds. Once a session, trouble wanders across your character’s path. Tis could come in the form of a hot but crazy person of the opposite sex,\na law enforcer who immediately dislikes the hero, an unexpected ship malfunction, or maybe just being the character targeted by some foe’s random attack. With the minor version of this Hindrance, the trouble is\ninconvenient but generally short lived. \n\n The major version places the character in the middle of more serious or long-lasting trouble." compset="Hindrance" summary="1x/session trouble affects you" uniqueness="unique">
+    <usesource source="FearAgent"/>
+    <tag group="User" tag="UserSelect" name="UserSelect" abbrev="UserSelect"/>
+    </thing>
+  <thing id="hinFAXeno" name="Xenophobic" description="Maybe your hero’s viewpoint is skewed by the fact that humanity’s frst encounter with aliens involved an army of murderous automatons and a horde of man-sized germs with acidic skin devastating Earth while a gaggle of rocket-powered dinosaurs used humanity like a buﬀet table. Or maybe he’s just got a thing about folks who look diﬀerent than him. Whatever the cause, your character doesn&apos;t take to aliens and isn&apos;t shy about saying so.\n\nEven when he bites his tongue, his body language is so obviously hostile that even a Sepliot feels a little awkward. He suﬀers a −2 Charisma toward any non-human he interacts with." compset="Hindrance" summary="–2 Charisma when dealing with aliens">
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="hinFAZeroG" name="Zero-G Sickness" description="Te lack of gravity makes your hero upchuck. He becomes nauseous and begins to throw up sporadically whenever exposed to zero-g environments for more than a moment or two. Tis causes an automatic level of Fatigue if he is in zero-g and not restrained. Tis Fatigue can cause Incapacitation, but not death (although he might fnd himself wishing for it). It is recovered after one hour in any other type of gravity." compset="Hindrance" summary="Nausea in Zero Gravity">
+    <tag group="User" tag="HindMajor"/>
+    </thing>
+  <thing id="edgFACapt" name="Captain" description="Your spacer has a light cargo hauler or scout ship of her very own. She may have inherited it, stolen it, or even bought it legitimately. She’s responsible for maintenance and fuel costs, hiring crew, securing charters, and all the other responsibilities that come with owning your own spaceship. \n\nThis Edge gives you the opportunity to start out a campaign with a spaceship. We recommend speaking with your GM if you want to take this Edge as she may have other plans, but especially so if you want to do it after character creation as an Advance." compset="Edge" summary="Start with a spaceship">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <tag group="EdgeType" tag="Background"/>
+    <exprreq message="Command Edge required"><![CDATA[hero.tagis[Edge.edgCommand] <> 0]]></exprreq>
+    <exprreq message="Piloting d8+ is required"><![CDATA[#traitfound[skPiloting] >= 4]]></exprreq>
+    <prereq message="Astrogation d6 required.">
+      <validate><![CDATA[foreach pick in hero where "thingid.skKnow"
+if (compare(lowercase(eachpick.field[domDomain].text),"astrogation") = 0) then
+validif (eachpick.field[trtFinal].value >= 3)
+endif
+nexteach]]></validate>
+      </prereq>
+    </thing>
+  <thing id="edgFAClone" name="Clone" description="Your character is actually a clone of someone else. He’s carrying a fairly complete imprint of his “parent’s” brainwaves, and as a result has a pretty\nfull set of life experiences to call upon. He starts with +20 XPs, which means he has four additional Advances. Since most characters start at Seasoned Rank with 20 XPs (see The Searchers), he would have 40 XPs to build with.\n\nDon’t think this is an easy route to success. While your hero is more experienced than most starting characters, he’s also carrying a lot of baggage from that other life. If you decide to take this Edge for your rocket\njockey, draw a single card from the Action Deck and show it to your GM. She compares it to the table on page 52 to see what sort of complications your hero might face as a result of his background.\n\nTake care when choosing this one. Cloning technology isn’t exactly an exact science in some systems, and your character could face anything from a subpar immune system to mental instability to old enemies he’s never even met!" compset="Edge" summary="You are not alone">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="User" tag="CreateOnly"/>
+    <tag group="EdgeType" tag="Background"/>
+    </thing>
+  <thing id="edgFAHard" name="Hard" description="Whether it’s a will of iron or a brain too dim to realize when it’s time to give up, your adventurer is just a tough SOB. She adds +1 to her Toughness and gets a +2 bonus to the Vigor roll after Incapacitation (Aftermath roll for Extras)" compset="Edge" summary="You&apos;re a tough SOB" uniqueness="unique">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="EdgeType" tag="Background" name="Background" abbrev="Background"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[
+      if (field[abilActive].value <> 0) then
+        perform #traitadjust[trTough,+,1,"Hard"]
+        endif]]>
+      <before name="Calc trtFinal"/>
+      </eval>
+    <exprreq message="Spirit d8+ required."><![CDATA[#trait[attrSpi] >= 4]]></exprreq>
+    </thing>
+  <thing id="edgFAIronJ" name="Iron Jaw" description="Your spacer can shrug oﬀ hits like he’s plated\nwith titanium. He may roll his Vigor instead of\nSpirit when recovering from Shaken." compset="Edge" summary="Use Vigor for Shaken">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="EdgeType" tag="Combat"/>
+    <exprreq message="Vigor d8+ required."><![CDATA[#trait[attrVig] >= 4]]></exprreq>
+    </thing>
+  <thing id="edgFAAgent" name="Fear Agent" description="During the Annubius Conﬂict, your hero was one of the notorious Fear Agents who fought a guerrilla war against both the Dressites and Tetaldians. Not many survived to see peace, but not because they were easy to kill. Fear Agents are harder to kill than a cockroach.\n\nWhenever hit by an attack which would cause enough damage to Incapacitate your hero, he gets a free Soak roll (without spending a Benny). He cannot spend a Benny for a second Soak roll but may use one to reroll\nthe Vigor roll for the first." compset="Edge" summary="Professional Troubleshooter">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="1"/>
+    <tag group="EdgeType" tag="Profession"/>
+    <exprreq message="Spririt d8+ required"><![CDATA[#trait[attrSpi] >= 4]]></exprreq>
+    <exprreq message="Vigor d6+ required."><![CDATA[#trait[attrVig] >= 3]]></exprreq>
+    <prereq message="Astrogation d6 required.">
+      <validate><![CDATA[foreach pick in hero where "thingid.skKnow"
+if (compare(lowercase(eachpick.field[domDomain].text),"astrogation") = 0) then
+validif (eachpick.field[trtFinal].value >= 2)
+endif
+nexteach]]></validate>
+      </prereq>
+    </thing>
+  <thing id="edgFAGravA" name="Gravitic Acclimation" description="Exposure to a variety of gravitational felds has taught your spacer how to operate in diﬀerent gravities without breaking her stride. She ignores the usual −2 penalty for operating in a gravity other than her own." compset="Edge" summary="Used to different gravities">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="0"/>
+    <tag group="EdgeType" tag="Profession"/>
+    <exprreq message="Agility d6+ required."><![CDATA[#trait[attrAgi] >= 3]]></exprreq>
+    </thing>
+  <thing id="edgFATSSci" name="Top Secret Scientist" description="Your character is one of the rare scientists who worked on top secret projects for the government, specifically access to alien technology discovered before the invasion. Due to your experience, you suﬀer no penalty when working with any technology due to its alien nature. Additionally, your training in keeping secrets grants a +2 bonus to resist Intimidation and for Persuasion rolls to successfully lie.\n\nThis Edge may only be taken during character creation, but your character may take the Knowledge (Astrogation) and Knowledge (Warp Science) skills during character creation as well (normally they may not be taken until Seasoned Rank." compset="Edge" summary="Science of extraordinary nature">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <tag group="EdgeType" tag="Profession"/>
+    <tag group="User" tag="CreateOnly"/>
+    <exprreq message="Smartd d8+ required"><![CDATA[#trait[attrSma] >= 4]]></exprreq>
+    <exprreq message="Spirit d8+ required"><![CDATA[#trait[attrSpi] >= 4]]></exprreq>
+    <exprreq message="Persuade d6+ is required"><![CDATA[#traitfound[skPersuade] >= 3]]></exprreq>
+    <prereq message="Engineering d8+ required.">
+      <validate><![CDATA[foreach pick in hero where "thingid.skKnow"
+if (compare(lowercase(eachpick.field[domDomain].text),"engineering") = 0) then
+validif (eachpick.field[trtFinal].value >= 4)
+endif
+nexteach]]></validate>
+      </prereq>
+    </thing>
+  <thing id="edgFAWarp" name="Warp Scientist" description="They don’t give doctorates in Warp Theory to just anyone. Your adventurer has invested significant time and effort in learning the complexities of warp fields and warp drives. Warp scientists are valued not just because of all the fancy words they know, but because they understand how to eke the most of out a spaceship’s warp engines. His knowledge of warp fields and the cosmos gives him +2 to all Knowledge (Astrogation) rolls to plot a spaceship’s course. With a raise on the roll, his ship uses half the hyper-fuel normally necessary for the journey." compset="Edge" summary="Understanding of Warp Drives">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <tag group="EdgeType" tag="Profession"/>
+    <tag group="User" tag="CreateOnly"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[~go through all knowledge skills and find an "Arcane" one
+foreach pick in hero where "thingid.skKnow"
+   if (compare(lowercase(eachpick.field[domDomain].text),"astrogation") = 0) then
+      perform #traitroll[skKnow,+,2,"Warp Scientist"]
+   endif
+nexteach]]>
+      <before name="Calc trtFinal"/>
+      </eval>
+    <exprreq message="Smartd d10+ required"><![CDATA[#trait[attrSma] >= 5]]></exprreq>
+    <prereq message="Warp Science d8+ required.">
+      <validate><![CDATA[foreach pick in hero where "thingid.skKnow"
+if (compare(lowercase(eachpick.field[domDomain].text),"warp science") = 0) then
+validif (eachpick.field[trtFinal].value >= 4)
+endif
+nexteach]]></validate>
+      </prereq>
+    <prereq message="Astrogation d6+ required">
+      <validate><![CDATA[foreach pick in hero where "thingid.skKnow"
+if (compare(lowercase(eachpick.field[domDomain].text),"astrogation") = 0) then
+validif (eachpick.field[trtFinal].value >= 3)
+endif
+nexteach]]></validate>
+      </prereq>
+    </thing>
+  <thing id="edgFAWrenc" name="Wrench Spinner" description="Req: Additional scientific knowledge skill d6+\n\nYour character is more comfortable in the engine room than on the bridge. Other crewmembers may call her a knuckle dragger or spanner monkey, but she’s at least as valuable to the ship as the glory hound playing with the joystick up top. She knows how to keep machines running when by all rights\nthey should be dead in the void—and bring them back to life with bubblegum and tape when they do die.\n\nShe adds +2 to all Repair rolls. With a raise, your hero halves the time required to fix something. If a Repair job states a raise allows a repair in half the time, your adventurer can fx it in one-quarter the time with a raise." compset="Edge" summary="+2 Repair; Fixed in half time (quarter with raise)" uniqueness="unique">
+    <usesource source="FearAgent"/>
+    <tag group="MinRank" tag="0" name="Novice" abbrev="Novice"/>
+    <tag group="EdgeType" tag="Profession"/>
+    <eval phase="PreTraits" priority="5000"><![CDATA[
+      if (field[abilActive].value <> 0) then
+        ~profesional bonus do not stack
+        perform #traitprof[skRepair,+,2,"Mr. Fix It"]
+        endif]]>
+      <before name="Calc trtFinal"/>
+      </eval>
+    <exprreq message="Repair d10 required."><![CDATA[#traitfound[skRepair] >= 5]]></exprreq>
+    <exprreq message="Smarts d8 required."><![CDATA[#trait[attrSma] >= 4]]></exprreq>
+    <prereq message="Engineering d6+ required">
+      <validate><![CDATA[foreach pick in hero where "thingid.skKnow"
+if (compare(lowercase(eachpick.field[domDomain].text),"engineering") = 0) then
+validif (eachpick.field[trtFinal].value >= 3)
+endif
+nexteach]]></validate>
+      </prereq>
+    </thing>
+  <thing id="eqFABattS" name="Battery, Small" description="Most high-tech items use batteries to provide power. If a device requires batteries, it indicates the type in its description. Batteries can be connected to a charger on a spaceship, generator, or power grid to recharge. Small batteries require one hour of charging" compset="Equipment" stacking="merge">
+    <fieldval field="grCost" value="25"/>
+    <fieldval field="gearWeight" value=".25"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="WeaponAcc"/>
+    </thing>
+  <thing id="eqFABatM" name="Battery, Medium" description="Most high-tech items use batteries to provide power. If a device requires batteries, it indicates the type in its description. Batteries can be connected to a charger on a spaceship, generator, or power grid to recharge. Small batteries require two hours of charging" compset="Equipment" stacking="merge">
+    <fieldval field="grCost" value="50"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="WeaponAcc"/>
+    </thing>
+  <thing id="eqFABatL" name="Battery, Large" description="Most high-tech items use batteries to provide power. If a device requires batteries, it indicates the type in its description. Batteries can be connected to a charger on a spaceship, generator, or power grid to recharge. Small batteries require three hours of charging" compset="Equipment" stacking="merge">
+    <fieldval field="grCost" value="100"/>
+    <fieldval field="gearWeight" value="4"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="WeaponAcc"/>
+    </thing>
+  <thing id="eqFAClerio" name="Clerion Patch" description="Advanced medical science sometimes spins oﬀ unwanted side eﬀects. Clerion patches were originally intended to be easily-applied sedatives which would work on virtually all sentient races. It is now more frequently encountered as a recreational—and highly addictive—drug.\n\nWhile wearing the patch, the user suﬀers no wound modifiers. However, it also places the wearer in a euphoric state, barely capable of interacting with his surrounding environment. After the patch is removed, the wearer gains\ntwo Fatigue levels. Every hour thereafter, he makes a Vigor roll.  Each success and raise recovers one level.  This Fatigue cannot cause Incapacitation.\n\nA user who critically fails the Vigor roll or simply wears the patch for more than an hour must make a Spirit roll or become addicted to clerion, gaining the Habit (Major) Hindrance.\n\nTe duration of the patch’s eﬀectiveness is dependent on the user’s species. On a human, a single clerion patch lasts 1d4 months." compset="Equipment" summary="Medical Drug" stacking="merge">
+    <fieldval field="grCost" value="2500"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Drugs"/>
+    </thing>
+  <thing id="armFAColdG" name="Cold Weather Gear" description="This suit includes a parka, snow pants, mittens, and boots. It provides +1 Armor due to its thickness and a +2 bonus to all Vigor rolls to resist Fatigue\ncaused by cold conditions." compset="Armor">
+    <fieldval field="defDefense" value="1"/>
+    <fieldval field="shortname" value="Cold Gear"/>
+    <fieldval field="grCost" value="300"/>
+    <fieldval field="gearWeight" value="10"/>
+    <fieldval field="defBullets" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorLoc" tag="Arms" name="Arms" abbrev="A"/>
+    <tag group="Equipment" tag="StackArmor"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    <tag group="ArmorType" tag="Personal"/>
+    <tag group="ArmorLoc" tag="Head" name="Head" abbrev="H"/>
+    <tag group="ArmorLoc" tag="Legs" name="Legs" abbrev="L"/>
+    </thing>
+  <thing id="eqFABinoDi" name="Binoculars, Digital" description="These binoculars are digitally-enhanced and provide magnification up to 100×. Tey also have light-amplifcation technology and allow the user to ignore all penalties to Notice rolls for Dim or Dark lighting conditions. Tey provide a +2 bonus to Notice rolls at a distance. Te binoculars require a small battery, operating for roughly 50 hours from a fully charged one." compset="Equipment">
+    <fieldval field="grCost" value="50"/>
+    <fieldval field="gearWeight" value="2"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Surveil"/>
+    </thing>
+  <thing id="eqFABootGr" name="Boots, Gravity" description="This footgear is usually worn in conjunction with a space suit. These boots create artificial gravity for the wearer in zero-gravity. They have three settings (low, normal, or high) allowing her to act as if she were in the equivalent environment." compset="Equipment">
+    <fieldval field="grCost" value="250"/>
+    <fieldval field="gearWeight" value="4"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Clothing"/>
+    </thing>
+  <thing id="eqFAGr12" name="GR-12" description="This chemical is usually administered in hypodermic form. It eliminates up to three wound levels sustained from cold or cold-based attacks, but leaves the\npatient with a Fatigue level due to the pain of blood recirculating into the eﬀected areas and nerves regaining sensation.\n\nIt can also fully revive a victim Incapacitated by a freonium gun, making it a popular combination for bounty hunters or field researchers seeking to capture their prey alive. Used in this manner, it gives the patient two Fatigue levels.\n\nIn either case, the recipient recovers a Fatigue level each hour after teh administration of the GR-12, with or without rest." compset="Equipment" summary="GR-12 Anti Freeze">
+    <fieldval field="grCost" value="50"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Drugs"/>
+    </thing>
+  <thing id="armFAHelMS" name="Helmet, Mind Shielding" description="This is a process applied to a sealed helmet, usually on a spacesuit, that provides considerable protection against telepathic attacks. The wearer receives +4 Armor to any psionic attack and a +4 bonus to any roll to resist a psionic Power. It provides no additional protection to conventional attacks." compset="Armor" summary="Mind Shielded Helmet">
+    <fieldval field="shortname" value="Cold Gear"/>
+    <fieldval field="grCost" value="1000"/>
+    <usesource source="FearAgent"/>
+    <tag group="Equipment" tag="StackArmor"/>
+    <tag group="ArmorType" tag="SFShield"/>
+    <tag group="ArmorLoc" tag="Head" name="Head" abbrev="H"/>
+    </thing>
+  <thing id="eqFAMatter" name="Matter Cutter" description="Depending on the culture that developed them, matter cutters use sonics,\nlasers, or even molecular disruption to make narrow cuts through most any substance. They’re used by workers (and worker bots) in construction, soldiers to breach ship hulls or fortifications, and salvage crews to cut down\nscrap. Tey can make a .5” wide, 12”-long cut in a round (real-world measurements, not game inches) in most materials. That time is doubled for each full 30 points of Armor the substance possesses. Used as an improvised melee weapon, it causes 3d6 Damage, with AP 10, but imposes a -2 penalty on its users Fighting rolls and Parry" compset="Equipment" summary="Matter Cutter Tool">
+    <fieldval field="grCost" value="5000"/>
+    <fieldval field="gearWeight" value="15"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="WeaponAcc"/>
+    </thing>
+  <thing id="wpFAMatter" name="Matter Cutter" description="Depending on the culture that developed them, matter cutters use sonics,\nlasers, or even molecular disruption to make narrow cuts through most any substance. They’re used by workers (and worker bots) in construction, soldiers to breach ship hulls or fortifcations, and salvage crews to cut down scrap. Tey can make a .5” wide, 12”-long cut in a round (real-world measurements, not game inches) in most materials. That time is doubled for each full 30 points of Armor the substance possesses. Used as an improvised melee weapon, it causes 3d6 Damage, with AP 10, but imposes a -2 penalty on its users Fighting rolls and Parry." compset="Melee">
+    <fieldval field="wpParry" value="-2"/>
+    <fieldval field="wpPiercing" value="10"/>
+    <fieldval field="grCost" value="5000"/>
+    <fieldval field="gearWeight" value="15"/>
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpSpecial" value="Heavy Weapon"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="ModMelee"/>
+    </thing>
+  <thing id="eqFAMediKi" name="Medikit" description="This is a typical medical kit available to most field personnel or crew. Fully stocked, it contains a variety of basic medical equipment and medications. Spacers with this kit receive a +2 on Healing rolls. If a user rolls a 1 on a Healing die (regardless of the Wild Die), he has run out of some necessary item in the kit, inﬂicting a −1 penalty until it is restocked" compset="Equipment" summary="First Aid Kit">
+    <fieldval field="grCost" value="100"/>
+    <fieldval field="gearWeight" value="4"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Medical"/>
+    </thing>
+  <thing id="eqFACommLn" name="Personal Commlink" description="A voice-activated communications device designed to be worn on the ear. It has a range of one mile." compset="Equipment" summary="Communications Link">
+    <fieldval field="grCost" value="100"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Communic"/>
+    </thing>
+  <thing id="eqFARepPat" name="Repair Patch" description="Small squares made of the same material as a spacesuit, repair patches allow a user to quickly repair a breach. Applying a patch is an action. Each breach of a suit requires one patch." compset="Equipment" stacking="merge">
+    <fieldval field="grCost" value="20"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Clothing"/>
+    </thing>
+  <thing id="eqFATransl" name="Translator Chip" description="This tiny processor can be worn as a nearly undetectable earpiece or implanted directly under the skin next to the wearer’s ear. The chip is keyed to its user and translates other spoken languages into her primary language. The chip does not maintain a database of known languages, but instead uses context, syntax, and other elements to create translations each time it is exposed to a diﬀerent language. Tis means it is not always completely correct in its renderings, requiring a Smarts roll by its user to interpret the correct meaning of the translation. It only works with relatively advanced spoken communication and is useless for attempting to communicate with a species of Class F or lower." compset="Equipment">
+    <fieldval field="grCost" value="750"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Communic"/>
+    </thing>
+  <thing id="eqFAThrust" name="Thruster Pack" description=" Unintentionally introduced to humanity by Zerin raiders, these rocket boosters are worn like backpacks. Other backpack equipment (like a flamer or freonium gun) cannot be carried at the same time as a thruster pack.\n\nThey use a combination of several fairly common molecules to generate a powerful but heatless reaction thrust for lift. A thruster pack grants ﬂight at Pace 25 and Climb 4. While ﬂying at top speed, attacks against the\nwearer are at a −1 penalty due to the dificulty of hitting an erratically moving target traveling at such velocity.\n\nThe pack’s Pace and Climb are halved if the wearer and his gear total more than 250 lb. The maximum load a thruster pack can carry is 400 lb.\n\nA fully-fueled thruster pack carries enough fuel for two hours of ﬂight time. A refuel costs $25." compset="Equipment" summary="Jetpack">
+    <fieldval field="grCost" value="1000"/>
+    <fieldval field="gearWeight" value="30"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Travel"/>
+    </thing>
+  <thing id="armFABody" name="Body Armor" description="Body armor is made of lightweight materials, usually ballistic fabrics, and can be worn over or under other clothing or even built into a uniform. The basic design is just a vest, but arms and legs can be covered as well at an additional cost of $100 for each and an additional 2 lbs. of weight" compset="Armor" summary="Covert Chest">
+    <fieldval field="defDefense" value="4"/>
+    <fieldval field="grCost" value="200"/>
+    <fieldval field="gearWeight" value="4"/>
+    <fieldval field="defBullets" value="4"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    <tag group="ArmorType" tag="Personal"/>
+    </thing>
+  <thing id="armFABACoa" name="Body Armor, Coat" description="Body armor is made of lightweight materials, usually ballistic fabrics, and can be worn over or under other clothing or even built into a uniform. Te basic design is just a vest, but arms and legs can be covered as well at an additional cost of $100 for each and an additional 2 lbs. of weight" compset="Armor" summary="Cover body and arms">
+    <fieldval field="defDefense" value="4"/>
+    <fieldval field="grCost" value="300"/>
+    <fieldval field="gearWeight" value="6"/>
+    <fieldval field="defBullets" value="4"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    <tag group="ArmorType" tag="Personal"/>
+    </thing>
+  <thing id="armFABACv" name="Body Armor, Coveralls" description="Body armor is made of lightweight materials, usually ballistic fabrics, and can be worn over or under other clothing or even built into a uniform. Te basic design is just a vest, but arms and legs can be covered as well at an additional cost of $100 for each and an additional 2 lbs. of weight" compset="Armor" summary="Cover body and legs">
+    <fieldval field="defDefense" value="4"/>
+    <fieldval field="grCost" value="300"/>
+    <fieldval field="gearWeight" value="6"/>
+    <fieldval field="defBullets" value="4"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorType" tag="Personal"/>
+    </thing>
+  <thing id="armFABASui" name="Body Armor, Suit" description="Body armor is made of lightweight materials, usually ballistic fabrics, and can be worn over or under other clothing or even built into a uniform. Te basic design is just a vest, but arms and legs can be covered as well at an additional cost of $100 for each and an additional 2 lbs. of weight" compset="Armor">
+    <fieldval field="defDefense" value="4"/>
+    <fieldval field="grCost" value="400"/>
+    <fieldval field="defBullets" value="4"/>
+    <fieldval field="gearWeight" value="8"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorType" tag="Personal"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    </thing>
+  <thing id="armFABreas" name="Breastplate" description="Body armor is made of lightweight materials, usually ballistic fabrics, and can be worn over or under other clothing or even built into a uniform. Te basic design is just a vest, but arms and legs can be covered as well at an additional cost of $100 for each and an additional 2 lbs. of weight" compset="Armor">
+    <fieldval field="defDefense" value="3"/>
+    <fieldval field="grCost" value="75"/>
+    <fieldval field="defBullets" value="3"/>
+    <fieldval field="gearWeight" value="15"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorType" tag="Personal"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    </thing>
+  <thing id="armFAForcP" name="Force Field, Personal" description="A very rare piece of tech, at least as far as Earthmen are concerned, this device is typically worn as a belt. It provides protection against all types of attack (except psionic) and is not aﬀected by AP. It runs for 24 hours on a small battery. Unlike other types of protective gear, a force field stacks with all other types of armor except force fields. It is considered sealed armor for the purposes of attacks." compset="Armor" summary="Negates all AP">
+    <fieldval field="defDefense" value="4"/>
+    <fieldval field="grCost" value="4500"/>
+    <fieldval field="defBullets" value="100"/>
+    <fieldval field="gearWeight" value="4"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorType" tag="SFShield"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="Equipment" tag="StackArmor"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    </thing>
+  <thing id="armFASpSui" name="Spacesuit" description="An airtight spacesuit made of ﬂexible fabric. It provides air, heat, and cooling, and can be fully sealed. It includes a helmet and personal commlink with a 20-\nmile range. Canisters for breathing contain an eight-hour supply.\n\nA sealed spacesuit provides complete protection against cold, vacuum, and heat up to 250° F. It’s also shielded against normal interstellar background radiation and provides +4 to rolls to resist more intense sources.\n\nA wearer who suﬀers a wound in a vacuum must apply a repair patch (page 22) or suﬀer the eﬀects of decompression (see Vacuum,page 41).\n\nSpare breathing canisters cost $50 and weigh 5 lbs. For an additional $500, a small thruster system can be added to allows the user to\nmaneuver in zero-gravity for up to eight hours." compset="Armor">
+    <fieldval field="defDefense" value="1"/>
+    <fieldval field="grCost" value="1000"/>
+    <fieldval field="gearWeight" value="20"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorType" tag="SFArmor"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    </thing>
+  <thing id="armFASpArm" name="Spacesuit, Armored" description="An airtight spacesuit made of ﬂexible fabric. It provides air, heat, and cooling, and can be fully sealed. It includes a helmet and personal commlink with a 20-\nmile range. Canisters for breathing contain an eight-hour supply.  Includes ballistic plates, fabric or similiar reinforcement." compset="Armor">
+    <fieldval field="defDefense" value="4"/>
+    <fieldval field="grCost" value="1500"/>
+    <fieldval field="gearWeight" value="26"/>
+    <usesource source="FearAgent"/>
+    <tag group="ArmorType" tag="SFArmor"/>
+    <tag group="ArmorLoc" tag="Head"/>
+    <tag group="ArmorLoc" tag="Arms"/>
+    <tag group="ArmorLoc" tag="Legs"/>
+    <tag group="ArmorLoc" tag="Torso" name="Torso" abbrev="T"/>
+    </thing>
+  <thing id="wpFAFrag" name="Grenade, Frag" description="Good, old-fashioned, blow-stuﬀ-up grenades. These were favorites of the Earth\nresistance during the Annubius Conflict, and many human exterminators and bounty hunters still use them for tough jobs." compset="SpecWeap" stacking="merge">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpShort" value="5"/>
+    <fieldval field="wpMedium" value="10"/>
+    <fieldval field="wpLong" value="20"/>
+    <fieldval field="wpFireRate" value="-"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="grCost" value="50"/>
+    <fieldval field="gearWeight" value=".25"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecGren"/>
+    <tag group="Weapon" tag="HvyWeapon" name="Heavy Weapon" abbrev="Heavy Weapon"/>
+    <tag group="Weapon" tag="LargeBurst" name="Large Burst Template" abbrev="Medium Burst Template"/>
+    </thing>
+  <thing id="wpFAGTherm" name="Grenade, Thermal" description="Thermal grenades have a smaller burst radius than other grenades, but fill that area with volatile liquid, gas, or plasma. Damage 3d10, HW, SBT. Ignores all but sealed armor and may set targets on fire, as described under Hazards, in Savage Worlds." compset="SpecWeap" stacking="merge">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShort" value="5"/>
+    <fieldval field="wpMedium" value="10"/>
+    <fieldval field="wpLong" value="20"/>
+    <fieldval field="wpFireRate" value="-"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="grCost" value="50"/>
+    <fieldval field="gearWeight" value=".25"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecGren"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="SmallBurst"/>
+    <tag group="Weapon" tag="SetFire"/>
+    <tag group="Weapon" tag="Thrown" name="Weapon can be Thrown" abbrev="Weapon can be Thrown"/>
+    </thing>
+  <thing id="wpFAGEmp" name="Grenade, EMP" description="Electromagnetic pulse grenades are designed to use against electronics and similar targets. They knock out electronic devices in a Medium Burst Template. For constructs, powered armor, or shielded devices, instead roll 3d6 damage and apply it against the target’s base Toughness (no Armor). These weapons cause no damage to non-electronic targets. Dressite soldiers enjoyed initial success against Tetaldian constructs with these weapons, but the cyborg race has long since learned to shield themselves and their robotic soldiers. MBT, HW" compset="SpecWeap" stacking="merge">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpShort" value="5"/>
+    <fieldval field="wpMedium" value="10"/>
+    <fieldval field="wpLong" value="20"/>
+    <fieldval field="wpFireRate" value="-"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="grCost" value="50"/>
+    <fieldval field="gearWeight" value=".25"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecGren"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="MedBurst"/>
+    <tag group="Weapon" tag="IgArmor"/>
+    </thing>
+  <thing id="wpFAGSmk" name="Grenade, Smoke" description="These grenades do no damage, but create an area of dense smoke in an LBT. This obscures vision, applying a −4 penalty to any Trait test relying on vision that passes into or through the area—including most attacks. For double the price, the smoke contains particulates that halve the damage from energy weapons." compset="SpecWeap" stacking="merge">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpShort" value="5"/>
+    <fieldval field="wpMedium" value="10"/>
+    <fieldval field="wpLong" value="20"/>
+    <fieldval field="wpFireRate" value="-"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="grCost" value="50"/>
+    <fieldval field="gearWeight" value=".25"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="Thrown" name="Weapon can be Thrown" abbrev="Weapon can be Thrown"/>
+    <tag group="WeaponType" tag="SpecGren"/>
+    <tag group="Weapon" tag="IgArmor"/>
+    <tag group="Weapon" tag="LargeBurst"/>
+    </thing>
+  <thing id="wpFABlPis" name="Blaster, Pistol" description="Blasters are to firearms what lasers are to flashlights—well, if flashlights were already effective weapons, anyway. They use electromagnetic accelerators to fre tiny particles of matter at their targets at ridiculously high speeds. Te ultra-high velocities cause more damage than traditional slug throwers, and thanks to the minute size of each individual particle, can hold large quantities of ammunition. For that reason, blasters are very popular among explorers who are going to be away from resupply for extended periods." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6+2"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="wpShort" value="12"/>
+    <fieldval field="wpMedium" value="24"/>
+    <fieldval field="wpLong" value="48"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpReload" value="1"/>
+    <fieldval field="grCost" value="300"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Weapon" tag="Pistol"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="Weapon" tag="SemiAuto"/>
+    </thing>
+  <thing id="wpFABlRif" name="Blaster, Rifle" description="Blasters are to firearms what lasers are to flashlights—well, if flashlights were already effective weapons, anyway. They use electromagnetic accelerators to fre tiny particles of matter at their targets at ridiculously high speeds. Te ultra-high velocities cause more damage than traditional slug throwers, and thanks to the minute size of each individual particle, can hold large quantities of ammunition. For that reason, blasters are very popular among explorers who are going to be away from resupply for extended periods." compset="Ranged">
+    <fieldval field="wpDamage" value="2d8+2"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="wpShort" value="24"/>
+    <fieldval field="wpMedium" value="48"/>
+    <fieldval field="wpLong" value="96"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpReload" value="1"/>
+    <fieldval field="grCost" value="500"/>
+    <fieldval field="gearWeight" value="5"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Weapon" tag="Rifle"/>
+    <tag group="Weapon" tag="SemiAuto"/>
+    </thing>
+  <thing id="eqFAPartPk" name="Particle Pack" description="Ammunition for blasters" compset="Ammunition" summary="Ammo for Blaster Weapons" lotsize="50" stacking="merge">
+    <fieldval field="gearWeight" value=".25"/>
+    <fieldval field="grLotCost" value="20"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="wpFADisPis" name="Disintegrator Pistol" description="These beam weapons are feared by any intelligent being who’s stared at the business end, because they function by disrupting matter itself. A target hit by the weapon suﬀers the listed damage, but if the disintegrator causes a wound, roll a hit location using the Injury Chart. The victim must make a Vigor roll. Failure means the affected location is completely disintegrated (causing death on a torso or head hit). Success means the location is crippled until the wound is healed, and a raise indicates there is no additional result beyond the damage. Inorganic matter hit by a beam is disintegrated in a 12-inch diameter, 4-inch deep disk per attack." compset="Ranged">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShots" value="5"/>
+    <fieldval field="wpReload" value="1"/>
+    <fieldval field="grCost" value="3000"/>
+    <fieldval field="gearWeight" value="5"/>
+    <fieldval field="wpShort" value="3"/>
+    <fieldval field="wpMedium" value="6"/>
+    <fieldval field="wpLong" value="12"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Weapon" tag="Pistol"/>
+    <tag group="Weapon" tag="SemiAuto"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    </thing>
+  <thing id="wpFADisRif" name="Disintegrator Rifle" description="These beam weapons are feared by any intelligent being who’s stared at the business end, because they function by disrupting matter itself. A target hit by the weapon suﬀers the listed damage, but if the disintegrator causes a wound, roll a hit location using the Injury Chart. The victim must make a Vigor roll. Failure means the affected location is completely disintegrated (causing death on a torso or head hit). Success means the location is crippled until the wound is healed, and a raise indicates there is no additional result beyond the damage. Inorganic matter hit by a beam is disintegrated in a 12-inch diameter, 4-inch deep disk per attack." compset="Ranged">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShots" value="5"/>
+    <fieldval field="wpReload" value="1"/>
+    <fieldval field="grCost" value="3000"/>
+    <fieldval field="gearWeight" value="5"/>
+    <fieldval field="wpShort" value="5"/>
+    <fieldval field="wpMedium" value="10"/>
+    <fieldval field="wpLong" value="20"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Weapon" tag="SemiAuto"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="StrReqDie" tag="3"/>
+    <tag group="Weapon" tag="Rifle"/>
+    </thing>
+  <thing id="eqFAAmmoDi" name="Disintegrators" description="Ammunition for Disintegrators" compset="Ammunition" summary="Ammo for Disintegrator Weapons" lotsize="50" stacking="merge">
+    <fieldval field="gearWeight" value="1"/>
+    <fieldval field="grLotCost" value="20"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="wpFAEngSp" name="Energy Spear" description="These alien weapons resemble high-tech versions of a common spear, albeit with a head that has two prongs. Tey use small batteries to generate a plasma charge between the two prongs, giving the weapon greater damage and penetration. The spear can be thrown (Range 3/6/12), but if the attack misses…well, now the target has an energy spear. \n\nA battery provides enough energy to power the spear for one hour. When not charged, the weapon functions as a normal spear (Str+d6)." compset="Melee">
+    <fieldval field="wpPiercing" value="4"/>
+    <fieldval field="gearWeight" value="10"/>
+    <fieldval field="grCost" value="150"/>
+    <fieldval field="wpParry" value="1"/>
+    <fieldval field="wpReach" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponDie" tag="4"/>
+    <tag group="WeaponType" tag="ModMelee"/>
+    <tag group="Equipment" tag="TwoHand"/>
+    </thing>
+  <thing id="wpFAVSaw" name="Vibro Saw" description="Tis small, handheld circular saw uses a small battery to run its blade at ridiculously high speeds, enabling it to cut any enemy foolish enough to get within reach to pieces with no fuss but lots of muss. Dressite soldiers usually have at least one of these on their belt easily accessible to their secondary “hands” for close combat. A small battery can run the saw for up to 30 minutes. When the battery is drained, the saw causes only Str+1d4 and loses its AP bonus." compset="Melee">
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="gearWeight" value="4"/>
+    <fieldval field="grCost" value="100"/>
+    <fieldval field="wpDamage" value="Str+2d6"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="ModMelee"/>
+    </thing>
+  <thing id="wpFAFlamet" name="Flamer" description="When in doubt, set it on fre. At the user’s option, ﬂamers blast ﬂames in either a Cone template or a concentrated jet 12” long and 1” wide. Each target in the selected area of eﬀect must make an Agility roll against the firer’s Shooting roll or take the listed damage. Flamers aﬀect the target’s least Armored area and are Heavy Weapons. A ﬂamer may set targets on fire\nas detailed in Savage Worlds, under Hazards. A ﬂamer uses a backpack-mounted fuel supply and cannot be used with other gear that requires a backpack attachment." compset="Ranged">
+    <fieldval field="wpDamage" value="3d12"/>
+    <fieldval field="wpSpecial" value="Ignores armor"/>
+    <fieldval field="gearWeight" value="30"/>
+    <fieldval field="wpShots" value="30"/>
+    <fieldval field="grCost" value="1000"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="ConeTempl" name="Cone Template" abbrev="Cone Template"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="SetFire"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Equipment" tag="TwoHand" name="Requires two hands" abbrev="Requires two hands"/>
+    <tag group="StrReqDie" tag="3"/>
+    <tag group="Weapon" tag="12Path" name="12&quot; Path" abbrev="12&quot; Path"/>
+    </thing>
+  <thing id="eqFAFPod" name="Fuel Pod, Flamer" description="Ammunition for flamers" compset="Ammunition" summary="Ammo for Flamer Weapons" lotsize="50" stacking="merge">
+    <fieldval field="grCost" value="60"/>
+    <fieldval field="gearWeight" value="3"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="wpFAFreGun" name="Freonium Gun" description="A freonium gun is a backpack weapon that blasts cold freonium at its target. It fires either a Cone template or concentrated jet 12” long and 1” wide at its wielder’s option. Each target in the area of eﬀect must make an Agility roll against the frer’s Shooting roll or take the listed damage. \n\nTargets who are Incapacitated by a freonium gun are covered in a sheet of ice and frozen solid. They can be revived by an application of GR-12 if applied within one hour of the freezing eﬀect." compset="Ranged" summary="Freeze Gun">
+    <fieldval field="wpDamage" value="2d10"/>
+    <fieldval field="wpSpecial" value="Ignores armor"/>
+    <fieldval field="gearWeight" value="30"/>
+    <fieldval field="wpShots" value="30"/>
+    <fieldval field="grCost" value="2000"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="ConeTempl" name="Cone Template" abbrev="Cone Template"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Equipment" tag="TwoHand" name="Requires two hands" abbrev="Requires two hands"/>
+    <tag group="StrReqDie" tag="3"/>
+    <tag group="Weapon" tag="IgArmor"/>
+    </thing>
+  <thing id="eqFAFuelF" name="Fuel Pod, Freonium" description="Ammunition for Freonium guns" compset="Ammunition" summary="Ammo for Freonium Weapons" lotsize="50" stacking="merge">
+    <fieldval field="grCost" value="100"/>
+    <fieldval field="gearWeight" value="3"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="wpFALasPis" name="Laser, Pistol" description="Lasers are the most common hand weapons in the United Systems. They use intensely focused beams of light to cause damage and inﬂict no recoil penalty when fired on full-auto. Lasers cauterize the wounds they cause, and anyone Incapacitated by a laser adds +2 to his Vigor rolls to keep from Bleeding Out. These weapons may also be overcharged, causing an extra d6 damage, but if any of the Shooting dice are a 1, the weapon must recharge for a full round before being fired again." compset="Ranged">
+    <fieldval field="wpDamage" value="2d6"/>
+    <fieldval field="wpShots" value="50"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpReload" value="1"/>
+    <fieldval field="grCost" value="250"/>
+    <fieldval field="gearWeight" value="2"/>
+    <fieldval field="wpShort" value="15"/>
+    <fieldval field="wpMedium" value="30"/>
+    <fieldval field="wpLong" value="60"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="SemiAuto"/>
+    <tag group="Weapon" tag="SnapFire"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Weapon" tag="Pistol"/>
+    </thing>
+  <thing id="wpFALasR" name="Laser, Rifle" description="Lasers are the most common hand weapons in the United Systems. They use intensely focused beams of light to cause damage and inﬂict no recoil penalty when fired on full-auto. Lasers cauterize the wounds they cause, and anyone Incapacitated by a laser adds +2 to his Vigor rolls to keep from Bleeding Out. These weapons may also be overcharged, causing an extra d6 damage, but if any of the Shooting dice are a 1, the weapon must recharge for a full round before being fired again." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpReload" value="1"/>
+    <fieldval field="grCost" value="700"/>
+    <fieldval field="gearWeight" value="8"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpLong" value="12"/>
+    <fieldval field="wpFireRate" value="3"/>
+    <fieldval field="wpMedium" value="60"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    <tag group="Weapon" tag="Rifle"/>
+    <tag group="Weapon" tag="SemiAuto"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    </thing>
+  <thing id="wpFALasGt" name="Laser, Gatling Style" description="Lasers are the most common hand weapons in the United Systems. They use intensely focused beams of light to cause damage and inﬂict no recoil penalty when fired on full-auto. Lasers cauterize the wounds they cause, and anyone Incapacitated by a laser adds +2 to his Vigor rolls to keep from Bleeding Out. These weapons may also be overcharged, causing an extra d6 damage, but if any of the Shooting dice are a 1, the weapon must recharge for a full round before being fired again." compset="Ranged">
+    <fieldval field="wpDamage" value="3d6+4"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="wpPiercing" value="2"/>
+    <fieldval field="wpReload" value="1"/>
+    <fieldval field="grCost" value="1000"/>
+    <fieldval field="wpShort" value="30"/>
+    <fieldval field="wpLong" value="12"/>
+    <fieldval field="wpFireRate" value="4"/>
+    <fieldval field="wpMedium" value="60"/>
+    <fieldval field="gearWeight" value="20"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="Rifle"/>
+    <tag group="Weapon" tag="ThreeRound"/>
+    <tag group="Weapon" tag="FullAuto"/>
+    <tag group="Weapon" tag="NoRecoil"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    </thing>
+  <thing id="eqFAAmoLas" name="Laser Battery" description="Ammunition for lasers" compset="Ammunition" summary="Ammo for Laser Weapons" lotsize="50" stacking="merge">
+    <fieldval field="gearWeight" value=".5"/>
+    <fieldval field="grLotCost" value="20"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="eqFAAmBl" name="Blaster Pack" description="Ammunition for Blaster" compset="Ammunition" summary="Ammo for Blaster Weapons" lotsize="50" stacking="merge">
+    <fieldval field="gearWeight" value=".25"/>
+    <fieldval field="grLotCost" value="20"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="eqFAAmoGt" name="Laser Battery, Heavy" description="Ammunition for Gatling lasers" compset="Ammunition" summary="Ammo for GatlingLaser" lotsize="50" stacking="merge">
+    <fieldval field="gearWeight" value="4"/>
+    <fieldval field="grLotCost" value="50"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="wpFAMLP" name="Missile Launcher, Portable" description="This shoulder-fired ordinance is for when a smaller weapon just won’t do. Targets ofen include tanks, Tetaldian attack saucers, or really big critters that just ordered “Human, rare,” a la carte. Guided missiles cost twice as much and grant a +2 bonus to attack rolls." compset="SpecWeap">
+    <fieldval field="wpDamage" value="6d6"/>
+    <fieldval field="wpSpecial" value="Single use"/>
+    <fieldval field="wpPiercing" value="20"/>
+    <fieldval field="wpShort" value="50"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="wpAmmo" value="88mm"/>
+    <fieldval field="gearWeight" value="8"/>
+    <fieldval field="wpMedium" value="100"/>
+    <fieldval field="wpLong" value="200"/>
+    <fieldval field="grCost" value="700"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="SnapFire" name="Snap Fire" abbrev="Snap Fire"/>
+    <tag group="WeaponType" tag="SpecMissil"/>
+    <tag group="Equipment" tag="TwoHand" name="Requires two hands" abbrev="Requires two hands"/>
+    <tag group="Weapon" tag="HvyWeapon" name="Heavy Weapon" abbrev="Heavy Weapon"/>
+    <tag group="Weapon" tag="SmallBurst"/>
+    </thing>
+  <thing id="eqFAAmmoMi" name="Missile" description="Missiles for shoulder launcher." compset="Ammunition" summary="Missiles for Launcher" stacking="merge">
+    <fieldval field="gearWeight" value="3"/>
+    <fieldval field="grLotCost" value="10000"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecMissil"/>
+    </thing>
+  <thing id="wpFAStunne" name="Stunner" description="Popular among both pacifists and bounty hunters looking for that premium for bringing in a fugitive “Alive,” stunners can put a target on his back without also putting him in a coffin, (or his species’ equivalent). After the target is hit, he must make a Vigor roll or fall prone and Incapacitated. At the start of each of his subsequent Actions, he makes a Vigor roll to revive. On a success, he revives but is Shaken and cannot attempt to recover until the next round. A raise revives him completely and instantly, and he is not Shaken.." compset="Ranged">
+    <fieldval field="wpDamage" value="Special"/>
+    <fieldval field="wpShort" value="5"/>
+    <fieldval field="wpMedium" value="10"/>
+    <fieldval field="wpShots" value="12"/>
+    <fieldval field="gearWeight" value="1"/>
+    <fieldval field="wpLong" value="20"/>
+    <fieldval field="grCost" value="300"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    </thing>
+  <thing id="eqFAAmmoSt" name="Stunner Pack" description="Ammunition for Stunner" compset="Ammunition" summary="Ammo for Stunner Weapons" lotsize="50" stacking="merge">
+    <fieldval field="gearWeight" value=".25"/>
+    <fieldval field="grLotCost" value="40"/>
+    <usesource source="FearAgent"/>
+    <tag group="GearType" tag="Ammo" name="Ammunition" abbrev="Ammunition"/>
+    </thing>
+  <thing id="wpFAGrnSep" name="=  Grenades =" compset="SpecWeap" isshowonly="yes">
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecGren" name="Special: Grenades" abbrev="Special: Grenades"/>
+    </thing>
+  <thing id="wpFAMisSep" name="=  Missiles =" compset="SpecWeap" isshowonly="yes">
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecMissil" name="Special: Missiles" abbrev="Special: Missiles"/>
+    </thing>
+  <thing id="wpSepFAMWp" name="= Basic Melee Weapons =" compset="Melee" isshowonly="yes">
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="ModMelee"/>
+    </thing>
+  <thing id="wpSepFAFE" name="= Futuristic Energy Weapons =" compset="Ranged" isshowonly="yes">
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="FutEnergy"/>
+    </thing>
+  <thing id="arSepFASS" name="= SciFi Shields =" compset="Armor" isshowonly="yes">
+    <usesource source="FearAgent"/>
+    <tag group="ArmorType" tag="SFShield"/>
+    </thing>
+  <thing id="arSepFASA" name="= SciFi Armor =" compset="Armor" isshowonly="yes">
+    <usesource source="FearAgent"/>
+    <tag group="ArmorType" tag="SFArmor"/>
+    </thing>
+  <thing id="arSepFAPA" name="= Personal Armor =" compset="Armor" isshowonly="yes">
+    <usesource source="FearAgent"/>
+    <tag group="ArmorType" tag="Personal"/>
+    </thing>
+  <thing id="eqFAsepcom" name="– Communication –" compset="Equipment" isshowonly="yes">
+    <tag group="GearType" tag="Communic" name="Communications" abbrev="Communications"/>
+    </thing>
+  <thing id="eqFAsepsu" name="– Surveillance –" compset="Equipment" isshowonly="yes">
+    <tag group="GearType" tag="Surveil" name="Surveillance" abbrev="Surveillance"/>
+    </thing>
+  <thing id="wpFASBomb" name="Bomb, Small 250lbs" compset="SpecWeap" lotsize="12">
+    <fieldval field="wpDamage" value="6d10"/>
+    <fieldval field="wpShort" value="Dropped"/>
+    <fieldval field="wpPiercing" value="10"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="grCost" value="42000"/>
+    <fieldval field="gearWeight" value="250"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="LargeBurst"/>
+    <tag group="WeaponType" tag="SFVehBombs"/>
+    </thing>
+  <thing id="wpFAMBomb" name="Bomb, Medium 500 lbs" compset="SpecWeap" lotsize="8">
+    <fieldval field="wpDamage" value="8d10"/>
+    <fieldval field="wpShort" value="Dropped"/>
+    <fieldval field="wpPiercing" value="20"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="grCost" value="125000"/>
+    <fieldval field="gearWeight" value="250"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SFVehBombs"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="Radius10"/>
+    </thing>
+  <thing id="wpFALBomb" name="Bomb, Large 1000 lbs" compset="SpecWeap" lotsize="4">
+    <fieldval field="wpDamage" value="10d10"/>
+    <fieldval field="wpShort" value="Dropped"/>
+    <fieldval field="wpPiercing" value="30"/>
+    <fieldval field="wpShots" value="1"/>
+    <fieldval field="gearWeight" value="250"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <fieldval field="grCost" value="250000"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="Radius20"/>
+    <tag group="WeaponType" tag="SFVehBombs"/>
+    </thing>
+  <thing id="wpFAVWEep" name="= Vehicle Weapons =" compset="SpecWeap" isshowonly="yes">
+    <tag group="WeaponType" tag="VehicleWep" name="Vehicle Weapons" abbrev="Vehicle Weapons"/>
+    </thing>
+  <thing id="wpFA40mm" name="Cannon, Medium AP" compset="SpecWeap">
+    <fieldval field="wpDamage" value="4d10"/>
+    <fieldval field="wpPiercing" value="20"/>
+    <fieldval field="wpShort" value="75"/>
+    <fieldval field="wpMedium" value="150"/>
+    <fieldval field="wpLong" value="300"/>
+    <fieldval field="grModsUsed" value="3"/>
+    <fieldval field="grCost" value="600000"/>
+    <fieldval field="wpShots" value="40"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="HvyWeapon" name="Heavy Weapon" abbrev="Heavy Weapon"/>
+    <tag group="Weapon" tag="MedBurst" name="Medium Burst Template" abbrev="Medium Burst Template"/>
+    <tag group="WeaponType" tag="VehicleWep" name="Vehicle Weapons" abbrev="Vehicle Weapons"/>
+    <tag group="Equipment" tag="Standard" name="Standard equipment" abbrev="Standard equipment"/>
+    </thing>
+  <thing id="wpFA40mmHE" name="Cannon, Medium HE" compset="SpecWeap">
+    <fieldval field="wpDamage" value="4d8"/>
+    <fieldval field="wpPiercing" value="10"/>
+    <fieldval field="wpShort" value="75"/>
+    <fieldval field="wpMedium" value="150"/>
+    <fieldval field="wpLong" value="300"/>
+    <fieldval field="grModsUsed" value="3"/>
+    <fieldval field="grCost" value="600000"/>
+    <fieldval field="wpShots" value="40"/>
+    <usesource source="FearAgent"/>
+    <tag group="Equipment" tag="Standard" name="Standard equipment" abbrev="Standard equipment"/>
+    <tag group="Weapon" tag="HvyWeapon" name="Heavy Weapon" abbrev="Heavy Weapon"/>
+    <tag group="Weapon" tag="LargeBurst"/>
+    <tag group="WeaponType" tag="VehicleWep" name="Vehicle Weapons" abbrev="Vehicle Weapons"/>
+    </thing>
+  <thing id="wpFACHAP" name="Cannon, Heavy AP" compset="SpecWeap">
+    <fieldval field="wpDamage" value="5d10"/>
+    <fieldval field="wpPiercing" value="30"/>
+    <fieldval field="wpShort" value="100"/>
+    <fieldval field="wpMedium" value="200"/>
+    <fieldval field="wpLong" value="400"/>
+    <fieldval field="grModsUsed" value="3"/>
+    <fieldval field="grCost" value="800000"/>
+    <fieldval field="wpShots" value="30"/>
+    <usesource source="FearAgent"/>
+    <tag group="Equipment" tag="Standard" name="Standard equipment" abbrev="Standard equipment"/>
+    <tag group="Weapon" tag="HvyWeapon" name="Heavy Weapon" abbrev="Heavy Weapon"/>
+    <tag group="Weapon" tag="LargeBurst"/>
+    <tag group="WeaponType" tag="VehicleWep" name="Vehicle Weapons" abbrev="Vehicle Weapons"/>
+    </thing>
+  <thing id="wpFACHHE" name="Cannon, Heavy (HE)" compset="SpecWeap">
+    <fieldval field="wpPiercing" value="15"/>
+    <fieldval field="wpShort" value="100"/>
+    <fieldval field="wpMedium" value="200"/>
+    <fieldval field="wpLong" value="400"/>
+    <fieldval field="grModsUsed" value="4"/>
+    <fieldval field="grCost" value="800000"/>
+    <fieldval field="wpDamage" value="5d8"/>
+    <fieldval field="wpShots" value="30"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="HvyWeapon" name="Heavy Weapon" abbrev="Heavy Weapon"/>
+    <tag group="Weapon" tag="Radius10"/>
+    <tag group="Equipment" tag="Standard" name="Standard equipment" abbrev="Standard equipment"/>
+    <tag group="WeaponType" tag="VehicleWep" name="Vehicle Weapons" abbrev="Vehicle Weapons"/>
+    </thing>
+  <thing id="eqFACMAP" name="Cannon Shells, Medium AP" description="Medium sized cannon shells, Armor Piercing" compset="Ammunition" summary="Ammunition for Cannon (AP)" lotsize="40" stacking="merge">
+    <fieldval field="gearWeight" value="300"/>
+    <fieldval field="grLotCost" value="6000"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecMissil"/>
+    </thing>
+  <thing id="eqFACMHE" name="Cannon Shells, Medium HE" description="Medium sized cannon shells, Armor Piercing" compset="Ammunition" summary="Ammunition for Cannon (AP)" lotsize="40" stacking="merge">
+    <fieldval field="gearWeight" value="300"/>
+    <fieldval field="grLotCost" value="6000"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecMissil"/>
+    </thing>
+  <thing id="eqFACHHE" name="Cannon Shells, Heavy HE" description="Medium sized cannon shells, Armor Piercing" compset="Ammunition" summary="Ammunition for Cannon (AP)" lotsize="30" stacking="merge">
+    <fieldval field="gearWeight" value="300"/>
+    <fieldval field="grLotCost" value="6000"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecMissil"/>
+    </thing>
+  <thing id="eqFACHAP" name="Cannon Shells, Heavy AP" description="Medium sized cannon shells, Armor Piercing" compset="Ammunition" summary="Ammunition for Cannon (AP)" lotsize="30" stacking="merge">
+    <fieldval field="gearWeight" value="300"/>
+    <fieldval field="grLotCost" value="6000"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SpecMissil"/>
+    </thing>
+  <thing id="wpFAVLL" name="Laser, Light" compset="SpecWeap" summary="Vehicle Mounted Laser">
+    <fieldval field="wpDamage" value="2d10"/>
+    <fieldval field="wpShort" value="150"/>
+    <fieldval field="wpMedium" value="300"/>
+    <fieldval field="wpLong" value="600"/>
+    <fieldval field="wpPiercing" value="5"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="grCost" value="100000"/>
+    <fieldval field="grModsUsed" value="1"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="VehicleWep"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="ReactFire"/>
+    </thing>
+  <thing id="wpFAVML" name="Laser, Medium" compset="SpecWeap" summary="Vehicle Mounted Laser">
+    <fieldval field="wpDamage" value="3d10"/>
+    <fieldval field="wpShort" value="150"/>
+    <fieldval field="wpMedium" value="300"/>
+    <fieldval field="wpLong" value="600"/>
+    <fieldval field="wpPiercing" value="10"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="grCost" value="500000"/>
+    <fieldval field="grModsUsed" value="2"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="VehicleWep"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="ReactFire"/>
+    </thing>
+  <thing id="wpFAVHL" name="Laser, Heavy" compset="SpecWeap" summary="Vehicle Mounted Laser">
+    <fieldval field="wpDamage" value="4d10"/>
+    <fieldval field="wpShort" value="150"/>
+    <fieldval field="wpMedium" value="300"/>
+    <fieldval field="wpLong" value="600"/>
+    <fieldval field="wpPiercing" value="15"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="grCost" value="1000000"/>
+    <fieldval field="grModsUsed" value="3"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="SFVehLaser"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="ReactFire"/>
+    <tag group="Equipment" tag="Standard"/>
+    </thing>
+  <thing id="wpFAVSHL" name="Laser, Super-Heavy" compset="SpecWeap" summary="Vehicle Mounted Laser">
+    <fieldval field="wpDamage" value="6d10"/>
+    <fieldval field="wpShort" value="150"/>
+    <fieldval field="wpMedium" value="300"/>
+    <fieldval field="wpLong" value="600"/>
+    <fieldval field="wpPiercing" value="25"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="grCost" value="4000000"/>
+    <fieldval field="grModsUsed" value="7"/>
+    <usesource source="FearAgent"/>
+    <tag group="WeaponType" tag="VehicleWep"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="Weapon" tag="ReactFire"/>
+    </thing>
+  <thing id="wpFAVMgL" name="Laser, Mega" description="Can only be mounted on Vehicles of size 16 or larger." compset="SpecWeap" summary="Vehicle Mounted Laser">
+    <fieldval field="wpDamage" value="10d10"/>
+    <fieldval field="wpShort" value="150"/>
+    <fieldval field="wpMedium" value="300"/>
+    <fieldval field="wpLong" value="600"/>
+    <fieldval field="wpPiercing" value="50"/>
+    <fieldval field="wpShots" value="100"/>
+    <fieldval field="grCost" value="10000000"/>
+    <fieldval field="grModsUsed" value="10"/>
+    <fieldval field="wpFireRate" value="1/2"/>
+    <usesource source="FearAgent"/>
+    <tag group="Weapon" tag="HvyWeapon"/>
+    <tag group="WeaponType" tag="VehicleWep"/>
+    <tag group="Weapon" tag="ReactFire"/>
+    <prereq message="Size 16 and Larger only">
+      <validate><![CDATA[
+       validif (parent.field[vhSize].value > 15)]]></validate>
+      </prereq>
+    </thing>
+  <thing id="eqFAPCL" name="Vehicle Power Core (Light)" description="Provides power for 100 shots of vehicle mounted Light Laser." compset="Ammunition" stacking="merge">
+    <fieldval field="grCost" value="200"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="eqFAPCM" name="Vehicle Power Core (Medium)" description="Provides power for 100 shots of vehicle mounted Medium Laser." compset="Ammunition" stacking="merge">
+    <fieldval field="grCost" value="1000"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="eqFAPCH" name="Vehicle Power Core (Heavy)" description="Provides power for 100 shots of vehicle mounted Heavy Laser." compset="Ammunition" stacking="merge">
+    <fieldval field="grCost" value="2000"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="eqFAPCSH" name="Vehicle Power Core (Super-Heavy)" description="Provides power for 100 shots of vehicle mounted Super-Heavy Laser." compset="Ammunition" stacking="merge">
+    <fieldval field="grCost" value="5000"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <thing id="eqFAPCMega" name="Vehicle Power Core (Mega)" description="Provides power for 100 shots of vehicle mounted Mega Laser." compset="Ammunition" stacking="merge">
+    <fieldval field="grCost" value="25000"/>
+    <fieldval field="gearWeight" value="1"/>
+    <usesource source="FearAgent"/>
+    </thing>
+  <preclude id="skWeirdSci" source="FearAgent"/>
+  <preclude id="skAthletic" source="FearAgent"/>
+  <preclude id="edgArcMag" source="FearAgent"/>
+  <preclude id="edgArcMir" source="FearAgent"/>
+  <preclude id="edgArcPsi" source="FearAgent"/>
+  <preclude id="edgArcSup" source="FearAgent"/>
+  <preclude id="edgArcSci" source="FearAgent"/>
+  <preclude id="edgArcRes" source="FearAgent"/>
+  <preclude id="edgArcRes2" source="FearAgent"/>
+  <preclude id="edgPwrSurg" source="FearAgent"/>
+  <preclude id="edgRapRch2" source="FearAgent"/>
+  <preclude id="edgRapRch" source="FearAgent"/>
+  <preclude id="edgNewPwr" source="FearAgent"/>
+  <preclude id="edgPwrPts" source="FearAgent"/>
+  <preclude id="edgSoulDrn" source="FearAgent"/>
+  <preclude id="edgAdept" source="FearAgent"/>
+  <preclude id="edgChamp" source="FearAgent"/>
+  <preclude id="edgHolyWar" source="FearAgent"/>
+  <preclude id="edgMental" source="FearAgent"/>
+  <preclude id="edgMrFixIt" source="FearAgent"/>
+  <preclude id="edgWizard" source="FearAgent"/>
+  <preclude id="edgSideKck" source="FearAgent"/>
+  <preclude id="edgGadget" source="FearAgent"/>
+  <preclude id="racHuman" source="FearAgent"/>
+  <preclude id="skPsionics" source="FearAgent"/>
+  <preclude id="skFaith" source="FearAgent"/>
+  <preclude id="skSpellcst" source="FearAgent"/>
+  </document>
